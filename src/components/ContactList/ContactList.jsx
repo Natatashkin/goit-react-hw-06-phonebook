@@ -1,13 +1,21 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import IconButton from '../IconButton';
 import { FaTrashAlt } from 'react-icons/fa';
 import { List, Item, Name, Number } from './ContactList.styles';
+import { useSelector, useDispatch } from 'react-redux';
+import { removeContact } from '../../redux/contactsSlice';
+import { showfilteredContacts } from '../../helpers';
 
-const ContactList = ({ contacts, onClick }) => {
+const ContactList = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts.items);
+  const filter = useSelector(state => state.contacts.filter);
+  const filteredContacts = showfilteredContacts(contacts, filter);
+
   return (
     <List>
-      {contacts.map(contact => {
+      {filteredContacts.map(contact => {
         const { id, name, number } = contact;
         return (
           <Item key={id}>
@@ -17,7 +25,7 @@ const ContactList = ({ contacts, onClick }) => {
               type="button"
               background="blue"
               aria-label="Button to delete contact"
-              onClick={() => onClick(id)}
+              onClick={() => dispatch(removeContact({ id, name }))}
             >
               <FaTrashAlt />
             </IconButton>
@@ -26,16 +34,6 @@ const ContactList = ({ contacts, onClick }) => {
       })}
     </List>
   );
-};
-
-ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    })
-  ),
 };
 
 export default ContactList;

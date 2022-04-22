@@ -2,6 +2,9 @@ import React from 'react';
 import * as yup from 'yup';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { FormField, Input, Label, ErrorMessageStyle } from './Form.styled';
+import { addContact } from '../../redux/contactsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { createValidContact } from '../../helpers';
 import Button from '../Button';
 
 const nameRegEx = /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/;
@@ -21,9 +24,13 @@ const schema = yup.object().shape({
     .required(),
 });
 
-export const AppForm = ({ getSubmitData }) => {
+export const AppForm = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts.items);
+
   const handleSubmit = (values, { resetForm }) => {
-    getSubmitData(values);
+    const contact = createValidContact(values, contacts);
+    dispatch(addContact(contact));
     resetForm();
   };
 

@@ -1,21 +1,34 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import IconButton from '../IconButton';
 import { FilterWrapper, Input } from './Filter.styled';
 import { FaTimes } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
+import { addFilterValue, resetFilter } from '../../redux/contactsSlice';
 
-const Filter = ({ value, onChange, onClick }) => {
+const Filter = () => {
+  const dispatch = useDispatch();
+  const value = useSelector(state => state.contacts.filter);
+
+  const handleFilterChange = e => {
+    dispatch(addFilterValue(e.target.value));
+  };
+
   return (
     <>
       <label htmlFor="filter">Find contact by name:</label>
       <FilterWrapper>
-        <Input type="text" name="filter" value={value} onChange={onChange} />
+        <Input
+          type="text"
+          name="filter"
+          value={value}
+          onChange={handleFilterChange}
+        />
         {value && (
           <IconButton
             color="blue"
             type="button"
             aria-label="Clear filter"
-            onClick={onClick}
+            onClick={() => dispatch(resetFilter())}
           >
             <FaTimes />
           </IconButton>
@@ -23,12 +36,6 @@ const Filter = ({ value, onChange, onClick }) => {
       </FilterWrapper>
     </>
   );
-};
-
-Filter.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  onClick: PropTypes.func.isRequired,
 };
 
 export default Filter;

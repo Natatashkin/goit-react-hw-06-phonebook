@@ -5,12 +5,13 @@ import { FaTrashAlt } from 'react-icons/fa';
 import { List, Item, Name, Number } from './ContactList.styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeContact } from '../../redux/contactsSlice';
+import { getContacts, getFilterValue } from '../../redux/storeSelectors';
 import { showfilteredContacts } from '../../helpers';
 
 const ContactList = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts.items);
-  const filter = useSelector(state => state.contacts.filter);
+  const contacts = useSelector(getContacts);
+  const filter = useSelector(getFilterValue);
   const filteredContacts = showfilteredContacts(contacts, filter);
 
   return (

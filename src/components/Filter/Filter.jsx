@@ -3,11 +3,12 @@ import IconButton from '../IconButton';
 import { FilterWrapper, Input } from './Filter.styled';
 import { FaTimes } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
+import { getFilterValue } from '../../redux/storeSelectors';
 import { addFilterValue, resetFilter } from '../../redux/contactsSlice';
 
 const Filter = () => {
   const dispatch = useDispatch();
-  const value = useSelector(state => state.contacts.filter);
+  const value = useSelector(getFilterValue);
 
   const handleFilterChange = e => {
     dispatch(addFilterValue(e.target.value));

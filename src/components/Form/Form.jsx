@@ -4,6 +4,7 @@ import { Formik, Form, ErrorMessage } from 'formik';
 import { FormField, Input, Label, ErrorMessageStyle } from './Form.styled';
 import { addContact } from '../../redux/contactsSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { getContacts } from '../../redux/storeSelectors';
 import { createValidContact } from '../../helpers';
 import Button from '../Button';
 
@@ -26,7 +27,7 @@ const schema = yup.object().shape({
 
 export const AppForm = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts.items);
+  const contacts = useSelector(getContacts);
 
   const handleSubmit = (values, { resetForm }) => {
     const contact = createValidContact(values, contacts);
